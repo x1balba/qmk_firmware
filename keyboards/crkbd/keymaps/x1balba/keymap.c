@@ -16,7 +16,6 @@
 
 #include QMK_KEYBOARD_H
 
-extern keymap_config_t keymap_config;
 
 #ifdef RGBLIGHT_ENABLE
 //Following line allows macro to read current RGB settings
@@ -117,8 +116,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 int RGB_current_mode;
 
-// Setting ADJUST layer RGB back to default
-void update_tri_layer_RGB(uint8_t layer1, uint8_t layer2, uint8_t layer3) {
+// Setting ADJUST layer when both lower and raise are held
+void update_tri_layer_ADJ(uint8_t layer1, uint8_t layer2, uint8_t layer3) {
   if (IS_LAYER_ON(layer1) && IS_LAYER_ON(layer2)) {
     layer_on(layer3);
   } else {
@@ -138,19 +137,19 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     case LOWER:
       if (record->event.pressed) {
         layer_on(_LOWER);
-        update_tri_layer_RGB(_LOWER, _RAISE, _ADJUST);
+        update_tri_layer_ADJ(_LOWER, _RAISE, _ADJUST);
       } else {
         layer_off(_LOWER);
-        update_tri_layer_RGB(_LOWER, _RAISE, _ADJUST);
+        update_tri_layer_ADJ(_LOWER, _RAISE, _ADJUST);
       }
       return false;
     case RAISE:
       if (record->event.pressed) {
         layer_on(_RAISE);
-        update_tri_layer_RGB(_LOWER, _RAISE, _ADJUST);
+        update_tri_layer_ADJ(_LOWER, _RAISE, _ADJUST);
       } else {
         layer_off(_RAISE);
-        update_tri_layer_RGB(_LOWER, _RAISE, _ADJUST);
+        update_tri_layer_ADJ(_LOWER, _RAISE, _ADJUST);
       }
       return false;
     case ADJUST:
@@ -181,11 +180,47 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
 #ifdef RGB_MATRIX_ENABLE
 
-void suspend_power_down_keymap(void) {
+/*
+void rgb_matrix_indicators_user(void) {
+    switch(get_highest_layer(layer_state|default_layer_state)) {
+        case _RAISE:
+            rgb_matrix_set_color_all(RGB_BLUE);
+            break;
+        case _LOWER:
+            rgb_matrix_set_color_all(RGB_YELLOW);
+            break;
+        case _GAMEPAD:
+            rgb_matrix_set_color_all(RGB_GREEN);
+            break;
+        default:
+            break;
+    }
+}
+*/
+
+void rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
+    for (uint8_t i = led_min; i <= led_max; i++) {
+        switch(get_highest_layer(layer_state|default_layer_state)) {
+            case _RAISE:
+                rgb_matrix_set_color(i, RGB_BLUE);
+                break;
+            case _LOWER:
+                rgb_matrix_set_color(i, RGB_YELLOW);
+                break;
+            case _GAMEPAD:
+                rgb_matrix_set_color(i, RGB_GREEN);
+                break;
+            default:
+                break;
+        }
+    }
+}
+
+void suspend_power_down_user(void) {
     rgb_matrix_set_suspend_state(true);
 }
 
-void suspend_wakeup_init_keymap(void) {
+void suspend_wakeup_init_user(void) {
     rgb_matrix_set_suspend_state(false);
 }
 
