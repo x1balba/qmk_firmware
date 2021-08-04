@@ -61,6 +61,7 @@
 #   define RGB_MATRIX_SPD_STEP 10
 #   define SPLIT_TRANSPORT_MIRROR
 #   define RGB_MATRIX_STARTUP_MODE RGB_MATRIX_RAINBOW_MOVING_CHEVRON
+#   define RGB_MATRIX_SPLIT { 27, 27 }
 
 /* Disable the animations you don't want/need.  You will need to disable a good number of these    *
  * because they take up a lot of space.  Disable until you can successfully compile your firmware. */
