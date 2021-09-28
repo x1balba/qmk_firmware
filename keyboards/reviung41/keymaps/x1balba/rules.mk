@@ -8,4 +8,4 @@ NKRO_ENABLE = no            # USB Nkey Rollover
 BACKLIGHT_ENABLE = no       # Enable keyboard backlight functionality
 RGBLIGHT_ENABLE = yes       # Enable keyboard RGB underglow
 UNICODEMAP_ENABLE = no      # Unicode
-TAP_DANCE_ENABLE = yes      # Tap Dance
+TAP_DANCE_ENABLE = no      # Tap Dance
